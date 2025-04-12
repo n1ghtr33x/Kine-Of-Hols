@@ -29,3 +29,8 @@ class Database:
         async with self.AsyncSessionLocal() as session:
             result = await session.execute(select(User).where(User.id == user_id))
             return result.scalars().first() is not None
+
+    async def get_user(self, user_data):
+        async with self.AsyncSessionLocal() as session:
+            result = await session.execute(select(User).where(User.name == user_data))
+            return result.scalars().first()

@@ -1,9 +1,10 @@
 from fastapi import APIRouter, HTTPException
-from models.player import PlayerData
+from models.player import PlayerData, LoginData
 from db.database import Database
 from config import get_settings
 from utils.id_generator import generate_unique_id
 from models.response import UserData, login_fail, login_success
+from utils.hash_password import verify_password, hash_password
 
 # Получаем настройки
 settings = get_settings()
@@ -22,7 +23,7 @@ async def register_player(data: PlayerData):
     await db.init_db()
     player_id = await generate_unique_id(db)
 
-    result = await db.add_user(data.player_name, data.password, player_id)
+    result = await db.add_user(data.player_name, await hash_password(data.password), player_id)
     if result == "user added":
         return {"status": "success", "user_data": {"id": player_id, "player_name": data.player_name}}
     elif result == "user exists":
