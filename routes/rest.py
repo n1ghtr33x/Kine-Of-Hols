@@ -14,7 +14,7 @@ router = APIRouter()
 
 @router.get("/version")
 async def get_version():
-    return {"version": "0.0.1"}
+    return {"version": settings.VERSION}
 
 @router.post("/register")
 async def register_player(data: PlayerData):
