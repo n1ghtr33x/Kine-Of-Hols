@@ -4,6 +4,7 @@ from models.player import PlayerData, LoginData
 from db.database import Database
 from config import get_settings
 from utils.id_generator import generate_unique_id
+from models.response import UserData, login_fail, login_success
 
 # Получаем настройки
 settings = get_settings()
@@ -36,26 +37,20 @@ async def login_player(data: LoginData):
     user = await db.get_user(data.name)
     if user:
         if await verify_password(data.password, user.password):
-            result = {
-                "status": "success",
-                "data": {
-                    "id": user.id,
-                    "name": user.name,
-                    "elixir": user.elixir,
-                    "gold": user.money,
-                    "gems": user.gems
-                }
-            }
-            return result
+            return await login_success(
+                data = UserData(
+                    id = user.id,
+                    name = user.name,
+                    elixir = user.elixir,
+                    gold = user.money,
+                    gems = user.gems
+                )
+            )
         else:
-            result = {
-                "status": "failed",
-                "data": "Incorrect password"
-            }
-            return result
+            return await login_fail(
+                data="Incorrect password"
+            )
     else:
-        result = {
-            "status": "failed",
-            "data": "Incorrect user"
-        }
-        return result
+        return await login_fail(
+            data="Incorrect user"
+        )
