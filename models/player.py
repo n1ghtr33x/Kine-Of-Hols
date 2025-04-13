@@ -7,3 +7,10 @@ class PlayerData(BaseModel):
 class LoginData(BaseModel):
     name: str
     password: str
+
+class SaveData(BaseModel):
+    name: str
+    password: str
+    elixir: int
+    gold: int
+    gems: int

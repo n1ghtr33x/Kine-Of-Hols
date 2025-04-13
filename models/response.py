@@ -26,3 +26,13 @@ async def login_fail(data: str):
         status="fail",
         data=data
     )
+
+class SaveDataResponse(BaseModel):
+    status: str
+    data: UserData
+
+async def save_data_success(data: UserData):
+    return SaveDataResponse(
+        status="success",
+        data=data
+    )

@@ -13,4 +13,7 @@ app.include_router(rest_router)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host=settings.HOST, port=settings.PORT)
+    if settings.DEBUG:
+        uvicorn.run(app, host=settings.HOST, port=settings.PORT)
+    else:
+        uvicorn.run(app, host=settings.HOST, port=settings.PORT, log_level="error")
